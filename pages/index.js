@@ -4,7 +4,7 @@ import Button from "@material-tailwind/react/Button";
 import Icon from "@material-tailwind/react/Icon";
 import ArrivalPage from '../components/ArrivalPage';
 import { getSession, useSession } from "next-auth/client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from '@material-tailwind/react/Modal';
 import ModalBody from '@material-tailwind/react/ModalBody';
 import ModalFooter from '@material-tailwind/react/ModalFooter';
@@ -23,12 +23,21 @@ export default function Home() {
   const [input, setInput] = useState("");
 
   const [notes] = useCollectionOnce(
-    db
-    .collection('userDocs')
+    db.collection('userDocs')
     .doc(session.user.email)
     .collection('docs')
     .orderBy('timestamp', 'desc')
   );
+
+  function deleteNote (clickedId) {
+    console.log(clickedId)
+    db.collection('userDocs')
+    .doc(session.user.email)
+    .collection("docs")
+    .doc(clickedId).delete()
+  }
+
+  useEffect(deleteNote, [])
 
   function createDocument () {
 
@@ -44,7 +53,7 @@ export default function Home() {
 
     setInput("");
     setShowModal(false);
-    window.location.reload(false)
+    window.location.reload(false);
   }
 
   const modal = (
@@ -115,7 +124,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-black px-10 md:px-0">
+      <section className="bg-black px-10 md:px-0 pb-96">
         <div className="max-w-3xl mx-auto py-8 text-sm text-white font-sans font-extralight">
           <div className="flex items-center justify-between pb-5 text-center">
             <h2 className="ml-2">My Notes</h2>
@@ -128,6 +137,7 @@ export default function Home() {
             id={doc.id}
             fileName={doc.data().fileName}
             date={doc.data().timestamp}
+            deleteNote={deleteNote}
           />
         ))}
 

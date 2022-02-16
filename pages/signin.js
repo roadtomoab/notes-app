@@ -1,4 +1,4 @@
-import { getProviders, getSession, signIn } from "next-auth/client"
+import { providers, getSession, signIn } from "next-auth/client"
 import Icon from "@material-tailwind/react/Icon";
 
 function SignIn ({ providers }) {
@@ -24,13 +24,13 @@ function SignIn ({ providers }) {
                 {Object.values(providers).map((provider) => (
                 <button
                     key={provider.name}
-                    className="bg-black hover:bg-white text-white hover:text-black transition border-none py-3 px-5 cursor-pointer font-sans text-xl font-thin"
+                    className="bg-black hover:bg-white text-white hover:text-black transition duration-300 border-none py-3 px-5 cursor-pointer font-sans text-xl font-thin"
                     onClick={() => signIn(provider.id)}>
                     SIGN IN WITH GOOGLE
                 </button>
                 ))}
             </div>
-            <a className="font-sans font-extralight text-white cursor-pointer pt-4">
+            <a className="font-sans font-extralight text-white cursor-pointer pt-4 hover:underline">
                 Don't have an account? Sign up here</a>
         </div>
     )
