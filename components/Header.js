@@ -3,7 +3,7 @@ import Icon from "@material-tailwind/react/Icon";
 import { signOut, useSession } from "next-auth/client";
 
 
-function Header () {
+function Header ( ) {
 
     const [session] = useSession();
 

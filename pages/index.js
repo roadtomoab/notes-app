@@ -3,7 +3,7 @@ import Header from "../components/header";
 import Button from "@material-tailwind/react/Button";
 import Icon from "@material-tailwind/react/Icon";
 import ArrivalPage from '../components/ArrivalPage';
-import { getSession, useSession } from "next-auth/client";
+import { getSession, useSession, signOut } from "next-auth/client";
 import { useEffect, useState } from 'react';
 import Modal from '@material-tailwind/react/Modal';
 import ModalBody from '@material-tailwind/react/ModalBody';
@@ -21,6 +21,9 @@ export default function Home() {
 
   const [showModal, setShowModal] = useState(false);
   const [input, setInput] = useState("");
+  const [searchTerm, setSearchTerm] = useState("")
+  const [userNotes, setUserNotes] = useState("")
+
 
   const [notes] = useCollectionOnce(
     db.collection('userDocs')
@@ -28,6 +31,16 @@ export default function Home() {
     .collection('docs')
     .orderBy('timestamp', 'desc')
   );
+
+  const whatTheFuck = () => notes?.docs.filter((note) => {
+
+    console.log("note: ", note.data().fileName)
+
+  })
+
+  whatTheFuck()
+
+
 
   function deleteNote (clickedId) {
     console.log(clickedId)
@@ -91,6 +104,10 @@ export default function Home() {
     </Modal>
   )
 
+  function handleSearchChange (e) {
+    setSearchTerm(e.target.value)
+  }
+
   return (
     <div>
       <Head>
@@ -99,7 +116,50 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
+      {/* header component  */}
+      <div className="sticky top-0 z-50 flex items-center px-4 py- 2 bg-black">
+            <Button
+                buttonType="outline"
+                color="white"
+                rounded={true}
+                iconOnly={true}
+                ripple="dark"
+                className="md:inline-flex h-20 w-20 border-0"
+            >
+                <Icon color="white" name="menu" size="3xl" />
+            </Button>
+
+            <div className="mx-5 md:mx-20 flex flex-grow items-center p-5 py-2 bg-white rounded-lg">
+                <Icon name="search" size="3xl" color="gray" />
+                <input onChange={handleSearchChange} type="text" placeholder="Search" className="flex-grow px-5 text-base bg-transparent outline-none font-sans font-extralight" />
+            </div>
+
+            <Button
+                buttonType="outline"
+                color="white"
+                rounded={true}
+                iconOnly={true}
+                ripple="dark"
+                className="md:inline-flex h-20 w-20 border-0"
+            >
+            <Icon
+                onClick={signOut}
+                name="logout"
+                size="3xl"
+                color="white"
+            />
+            </Button>
+
+            {/* <img
+                onClick={signOut}
+                loading="lazy"
+                className="cursor-pointer h-12 w-12 rounded-full ml-2"
+                src={session?.user?.image}
+                alt=""
+            /> */}
+        </div>
+
+      {/* <Header /> */}
       {modal}
 
       <section className="bg-black pb-10 px-10 md:px-0 font-sans font-extralight">
@@ -131,12 +191,19 @@ export default function Home() {
             <p className="mr-2">Date Created</p>
           </div>
       
-        {notes?.docs.map((doc) => (
+        {notes?.docs.filter((note) => {
+            if (searchTerm == "") {
+              return note;
+            }
+            else if (note.data().fileName.toLowerCase().includes(searchTerm.toLowerCase())) {
+              return note;
+            }
+        }).map((note) => (
           <NotePreview
-            key={doc.id}
-            id={doc.id}
-            fileName={doc.data().fileName}
-            date={doc.data().timestamp}
+            key={note.id}
+            id={note.id}
+            fileName={note.data().fileName}
+            date={note.data().timestamp}
             deleteNote={deleteNote}
           />
         ))}

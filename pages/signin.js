@@ -6,13 +6,13 @@ function SignIn ({ providers }) {
         <div className="flex flex-col items-center justify-center min-h-full py-56 bg-black">
             <h2 className="text-white text-5xl font-sans font-thin text-center py-4">SIGN IN</h2>
             <input
-              className="h-12 w-72 px-2 font-sans font-thin"
-              placeholder="email"
+              className="h-12 w-72 px-2 font-sans font-thin text-center text-white bg-black hover:text-black hover:bg-white transition duration-300"
+              placeholder="e-mail"
               type="text"
             />
             <br></br>
             <input
-              className="h-12 w-72 px-2 font-sans font-thin"
+              className="h-12 w-72 px-2 font-sans font-thin text-center text-white bg-black hover:text-black hover:bg-white transition duration-300"
               placeholder="password"
               type="password"
             />
