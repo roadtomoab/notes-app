@@ -22,7 +22,6 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [input, setInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("")
-  const [userNotes, setUserNotes] = useState("")
 
 
   const [notes] = useCollectionOnce(
@@ -31,16 +30,6 @@ export default function Home() {
     .collection('docs')
     .orderBy('timestamp', 'desc')
   );
-
-  const whatTheFuck = () => notes?.docs.filter((note) => {
-
-    console.log("note: ", note.data().fileName)
-
-  })
-
-  whatTheFuck()
-
-
 
   function deleteNote (clickedId) {
     console.log(clickedId)
